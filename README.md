@@ -1,4 +1,5 @@
 # nganalyzer
+[![npm version](https://badge.fury.io/js/nganalyzer.svg)](https://badge.fury.io/js/nganalyzer)
 
 `nganalyzer` is a tool for analyzing Angular apps.
 
