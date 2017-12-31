@@ -2,7 +2,7 @@
   "name": "nglint-cli",
   "version": "0.1.3",
   "bin": {
-    "nglint": "./dist/index.js"
+    "nglint": "./dist/nglint-cli.js"
   },
   "repository": "https://github.com/kevinphelps/nglint.git",
   "author": "Kevin Phelps <KevinPhelps11@gmail.com>",
