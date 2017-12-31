@@ -5,5 +5,5 @@ export interface Config {
 }
 
 export function getConfig() {
-  return JSON.parse(fs.readFileSync('./nglint.json').toString());
+  return JSON.parse(fs.readFileSync('./nganalyzer.json').toString());
 }

@@ -28,7 +28,7 @@
   },
   "include": [
     "./src/index.ts",
-    "./src/nglint-cli.ts",
+    "./src/nganalyzer-cli.ts",
     "./src/rules/*.ts"
   ]
 }

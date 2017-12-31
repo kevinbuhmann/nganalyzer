@@ -1,13 +1,13 @@
 import * as path from 'path';
 import * as ts from 'typescript';
 
+import { AbstractRule } from './../abstract-rule';
 import { FailureReporter } from './../failure-reporter';
 import { containsMatchingElement } from './../helpers/ng-html-ast.helpers';
 import { getComponentSelector, isComponentClass } from './../helpers/ts-ast.helpers';
 import { NgProgram } from './../ng-program';
-import { NglintRule } from './../nglint-rule';
 
-export class Rule extends NglintRule {
+export class Rule extends AbstractRule {
   static FAILURE_STRING_FACTORY(component: string) {
     return `The '${component}' component is not used. Remove it.`;
   }

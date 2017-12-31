@@ -1,21 +1,21 @@
-# nglint
+# nganalyzer
 
-`nglint` is a tool for linting Angular apps.
+`nganalyzer` is a tool for linting Angular apps.
 
 ## Installation
 
-- `npm install --save-dev nglint-cli`
-- `yarn add --dev nglint-cli`
+- `npm install --save-dev nganalyzer`
+- `yarn add --dev nganalyzer`
 
 ## Usage
 
-- `nglint --help`: display help info
-- `nglint --version`: display the installed version
-- `nglint [--project ./tsconfig.json]`: lint a project and report failures
+- `nganalyzer --help`: display help info
+- `nganalyzer --version`: display the installed version
+- `nganalyzer [--project ./tsconfig.json]`: lint a project and report failures
 
 ## Configuration
 
-Add a `nglint.json` file at the root of your project to configure which rules to run.
+Add an `nganalyzer.json` file at the root of your project to configure which rules to run.
 
 ```json
 {

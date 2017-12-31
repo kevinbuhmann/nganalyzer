@@ -1,3 +1,3 @@
+export * from './abstract-rule';
 export * from './ng-program';
-export * from './nglint';
-export * from './nglint-rule';
+export * from './nganalyzer';

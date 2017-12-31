@@ -3,7 +3,7 @@
 import * as yargs from 'yargs';
 
 import { getConfig } from './config';
-import { nglint } from './nglint';
+import { nganalyzer } from './nganalyzer';
 
 const version = require('./../package.json').version;
 
@@ -13,7 +13,7 @@ const args = yargs.argv;
 
 const config = getConfig();
 
-const failuresFound = nglint(config, args.project).report();
+const failuresFound = nganalyzer(config, args.project).report();
 
 if (failuresFound) {
   process.exit(1);

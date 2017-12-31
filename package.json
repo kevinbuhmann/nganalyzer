@@ -1,12 +1,12 @@
 {
-  "name": "nglint-cli",
-  "version": "0.1.5",
+  "name": "nganalyzer",
+  "version": "0.2.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "nglint": "./dist/nglint-cli.js"
+    "nganalyzer": "./dist/nganalyzer-cli.js"
   },
-  "repository": "https://github.com/kevinphelps/nglint.git",
+  "repository": "https://github.com/kevinphelps/nganalyzer.git",
   "author": "Kevin Phelps <KevinPhelps11@gmail.com>",
   "license": "MIT",
   "scripts": {
