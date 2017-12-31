@@ -1,8 +1,8 @@
 {
   "name": "nglint-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "bin": {
-    "nglint": "dist/index.js"
+    "nglint": "./dist/index.js"
   },
   "repository": "https://github.com/kevinphelps/nglint.git",
   "author": "Kevin Phelps <KevinPhelps11@gmail.com>",
@@ -11,7 +11,8 @@
     "clean": "rimraf ./dist",
     "lint": "tslint --project ./tsconfig.json",
     "prebuild": "yarn run clean && yarn run lint",
-    "build": "tsc --project ./tsconfig.json"
+    "build": "tsc --project ./tsconfig.json",
+    "prepare": "yarn run build"
   },
   "dependencies": {
     "@angular/common": "5.1.2",
