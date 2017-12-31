@@ -13,15 +13,13 @@ export class Rule extends NglintRule {
       ts.forEachChild(sourceFile, function visit(node) {
         if (ts.isClassDeclaration(node) && isComponentClass(node)) {
           const componentName = node.name.getText();
-          const componentSelector = getComponentSelector(node);
+          const selector = getComponentSelector(node);
 
           const componentUsedInRoutes = ngProgram.routedComponents.some(component => component.path === path.normalize(sourceFile.fileName) && component.name === componentName);
+          const componentUsedInTemplate = selector && ngProgram.components.some(component => containsMatchingElement(component.templateAst, element => element.name === selector));
 
-          const componentUsedInTemplate = componentSelector
-            && ngProgram.components.some(component => containsMatchingElement(component.templateAst, element => element.name === componentSelector));
-
-          if (!componentUsedInRoutes && !componentUsedInTemplate && componentSelector !== 'app-root') {
-            failureReporter.addFailure({ node: node.name, message: `The '${componentSelector || componentName}' component is not used. Remove it.` });
+          if (!componentUsedInRoutes && !componentUsedInTemplate && selector !== 'app-root') {
+            failureReporter.addFailure({ node: node.name, message: `The '${selector || componentName}' component is not used. Remove it.` });
           }
         }
 
