@@ -1,6 +1,6 @@
 {
   "name": "nglint-cli",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
@@ -22,7 +22,6 @@
     "typescript": ">=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev"
   },
   "dependencies": {
-    "chalk": "2.3.0",
     "yargs": "10.0.3"
   },
   "devDependencies": {
