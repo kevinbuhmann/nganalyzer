@@ -7,7 +7,7 @@ import { getNgProgram } from './ng-program';
 import { NglintRule } from './nglint-rule';
 import { ProgramLanguageServiceHost } from './program-language-service-host';
 
-export function runLinter(config: Config, project: string) {
+export function nglint(config: Config, project: string) {
   const failureReporter = new FailureReporter();
 
   const program = tslint.Linter.createProgram(project);

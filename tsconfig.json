@@ -6,6 +6,7 @@
     "declaration": false,
     "moduleResolution": "node",
     "target": "es5",
+    "module": "commonjs",
     "noEmitOnError": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -26,6 +27,7 @@
     ]
   },
   "include": [
+    "./src/index.ts",
     "./src/nglint-cli.ts",
     "./src/rules/*.ts"
   ]

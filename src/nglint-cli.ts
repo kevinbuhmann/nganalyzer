@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import * as yargs from 'yargs';
 
 import { getConfig } from './config';
-import { runLinter } from './linter';
+import { nglint } from './nglint';
 
 const version = require('./../package.json').version;
 
@@ -14,7 +14,7 @@ const args = yargs.argv;
 
 const config = getConfig();
 
-const failuresFound = runLinter(config, args.project).report();
+const failuresFound = nglint(config, args.project).report();
 
 if (failuresFound) {
   console.log(chalk.red('\nPlease fix the above \'nglint\' failures.'));
