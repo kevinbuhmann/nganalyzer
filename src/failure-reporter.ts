@@ -8,8 +8,8 @@ export interface Failure {
 export class FailureReporter {
   private readonly failures: Failure[] = [];
 
-  addFailure(failure: Failure) {
-    this.failures.push(failure);
+  addFailureAtNode(node: ts.Node, message: string) {
+    this.failures.push({ node, message });
   }
 
   report() {

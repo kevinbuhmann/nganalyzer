@@ -31,7 +31,7 @@ export class Rule extends NglintRule {
 
           if (!ngProgram.components.some(component => containsMatchingElement(component.templateAst, elementUsesBinding))) {
             const bindingType = inputDecorator ? 'input' : 'output';
-            failureReporter.addFailure({ node: node.name, message: Rule.FAILURE_STRING_FACTORY(selector, binding, bindingType) });
+            failureReporter.addFailureAtNode(node.name, Rule.FAILURE_STRING_FACTORY(selector, binding, bindingType));
           }
         }
       }

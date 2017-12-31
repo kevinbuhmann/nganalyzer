@@ -23,7 +23,7 @@ export class Rule extends NglintRule {
           const componentUsedInTemplate = selector && ngProgram.components.some(component => containsMatchingElement(component.templateAst, element => element.name === selector));
 
           if (!componentUsedInRoutes && !componentUsedInTemplate && selector !== 'app-root') {
-            failureReporter.addFailure({ node: node.name, message: Rule.FAILURE_STRING_FACTORY(selector || componentName) });
+            failureReporter.addFailureAtNode(node.name, Rule.FAILURE_STRING_FACTORY(selector || componentName));
           }
         }
 
