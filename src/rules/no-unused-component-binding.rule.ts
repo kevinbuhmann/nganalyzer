@@ -9,6 +9,10 @@ import { NgProgram } from './../ng-program';
 import { NglintRule } from './../nglint-rule';
 
 export class Rule extends NglintRule {
+  static FAILURE_STRING_FACTORY(selector: string, binding: string, bindingType: 'input' | 'output') {
+    return `The '${binding}' ${bindingType} on the '${selector}' component is not used. Remove it.`;
+  }
+
   apply(sourceFile: ts.SourceFile, ngProgram: NgProgram, failureReporter: FailureReporter) {
     ts.forEachChild(sourceFile, function visit(node) {
       if (ts.isPropertyDeclaration(node) && ts.isClassDeclaration(node.parent) && isComponentClass(node.parent)) {
@@ -27,7 +31,7 @@ export class Rule extends NglintRule {
 
           if (!ngProgram.components.some(component => containsMatchingElement(component.templateAst, elementUsesBinding))) {
             const bindingType = inputDecorator ? 'input' : 'output';
-            failureReporter.addFailure({ node: node.name, message: `The '${binding}' ${bindingType} on the '${selector}' component is not used. Remove it.` });
+            failureReporter.addFailure({ node: node.name, message: Rule.FAILURE_STRING_FACTORY(selector, binding, bindingType) });
           }
         }
       }

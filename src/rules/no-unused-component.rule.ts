@@ -8,6 +8,10 @@ import { NgProgram } from './../ng-program';
 import { NglintRule } from './../nglint-rule';
 
 export class Rule extends NglintRule {
+  static FAILURE_STRING_FACTORY(component: string) {
+    return `The '${component}' component is not used. Remove it.`;
+  }
+
   apply(sourceFile: ts.SourceFile, ngProgram: NgProgram, failureReporter: FailureReporter) {
     if (!sourceFile.fileName.endsWith('.spec.ts')) {
       ts.forEachChild(sourceFile, function visit(node) {
@@ -19,7 +23,7 @@ export class Rule extends NglintRule {
           const componentUsedInTemplate = selector && ngProgram.components.some(component => containsMatchingElement(component.templateAst, element => element.name === selector));
 
           if (!componentUsedInRoutes && !componentUsedInTemplate && selector !== 'app-root') {
-            failureReporter.addFailure({ node: node.name, message: `The '${selector || componentName}' component is not used. Remove it.` });
+            failureReporter.addFailure({ node: node.name, message: Rule.FAILURE_STRING_FACTORY(selector || componentName) });
           }
         }
 
