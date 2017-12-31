@@ -4,6 +4,7 @@ import { ngWalkerFactoryUtils } from 'codelyzer/angular/ngWalkerFactoryUtils';
 import * as ts from 'typescript';
 
 import { getDefinition, getObjectLiteralElement, isComponentClass } from './helpers/ts-ast.helpers';
+import { ProgramLanguageServiceHost } from './program-language-service-host';
 
 const ngMetadataReader = ngWalkerFactoryUtils.defaultMetadataReader();
 const htmlParser = new ngc.HtmlParser();
@@ -22,7 +23,10 @@ export interface NgProgram {
   routedComponents: Component[];
 }
 
-export function getNgProgram(program: ts.Program, languageService: ts.LanguageService) {
+export function getNgProgram(program: ts.Program) {
+  const languageServiceHost = new ProgramLanguageServiceHost(program);
+  const languageService = ts.createLanguageService(languageServiceHost, ts.createDocumentRegistry());
+
   const components = getAllComponents(program);
 
   const ngProgram: NgProgram = {
@@ -33,7 +37,7 @@ export function getNgProgram(program: ts.Program, languageService: ts.LanguageSe
   return ngProgram;
 }
 
-export function getAllComponents(program: ts.Program) {
+function getAllComponents(program: ts.Program) {
   const components: Component[] = [];
 
   for (const sourceFile of program.getSourceFiles()) {
@@ -57,7 +61,7 @@ export function getAllComponents(program: ts.Program) {
   return components;
 }
 
-export function getAllRoutedComponents(program: ts.Program, languageService: ts.LanguageService, components: Component[]) {
+function getAllRoutedComponents(program: ts.Program, languageService: ts.LanguageService, components: Component[]) {
   const routedComponents: Component[] = [];
 
   for (const sourceFile of program.getSourceFiles()) {
