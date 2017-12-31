@@ -1,10 +1,9 @@
 import * as ngc from '@angular/compiler';
 import { ComponentMetadata } from 'codelyzer/angular/metadata';
 import { ngWalkerFactoryUtils } from 'codelyzer/angular/ngWalkerFactoryUtils';
-import * as path from 'path';
 import * as ts from 'typescript';
 
-import { getDefinition, getObjectLiteralElement, getParentOfType, isComponentClass } from './helpers/ts-ast.helpers';
+import { getDefinition, getObjectLiteralElement, isComponentClass } from './helpers/ts-ast.helpers';
 
 const ngMetadataReader = ngWalkerFactoryUtils.defaultMetadataReader();
 const htmlParser = new ngc.HtmlParser();
@@ -43,7 +42,7 @@ export function getAllComponents(program: ts.Program) {
         const componentMetadata = ngMetadataReader.read(node) as ComponentMetadata;
 
         const componentName = node.name.getText();
-        const componentPath = path.normalize(sourceFile.fileName);
+        const componentPath = sourceFile.fileName;
         const selector = componentMetadata.selector;
         const template = componentMetadata.template.template.source;
         const templateAst = htmlParser.parse(template, undefined);
@@ -64,7 +63,7 @@ export function getAllRoutedComponents(program: ts.Program, languageService: ts.
   for (const sourceFile of program.getSourceFiles()) {
     ts.forEachChild(sourceFile, function visit(node) {
       if (ts.isCallExpression(node) && ['RouterModule.forRoot', 'RouterModule.forChild'].includes(node.expression.getText())) {
-        routedComponents.push(...getRoutedComponents(node.arguments[0], languageService, components));
+        routedComponents.push(...getRoutedComponents(node.arguments[0], program, languageService, components));
       }
 
       ts.forEachChild(node, visit);
@@ -76,7 +75,7 @@ export function getAllRoutedComponents(program: ts.Program, languageService: ts.
 
 }
 
-function getRoutedComponents(node: ts.Node, languageService: ts.LanguageService, components: Component[]) {
+function getRoutedComponents(node: ts.Node, program: ts.Program, languageService: ts.LanguageService, components: Component[]) {
   const routedComponents: Component[] = [];
 
   const sourceFile = node.getSourceFile();
@@ -86,34 +85,30 @@ function getRoutedComponents(node: ts.Node, languageService: ts.LanguageService,
     const childrenElement = getObjectLiteralElement(node, 'children');
 
     if (componentElement && ts.isPropertyAssignment(componentElement)) {
-
-      const definition = getDefinition(componentElement.initializer, languageService);
-      const definitionIdentifier: ts.Identifier = (ts as any).getTouchingToken(sourceFile, definition.textSpan.start);
-      const importDeclaration = getParentOfType(definitionIdentifier, ts.isImportDeclaration);
-      const importSource = (importDeclaration.moduleSpecifier as ts.StringLiteral).text;
-
       const componentName = componentElement.initializer.getText();
-      const componentPath = `${path.resolve(path.dirname(sourceFile.fileName), importSource)}.ts`;
+      const componentDefinition = getDefinition(componentElement.initializer, program, languageService);
+      const componentPath = componentDefinition.fileName;
+
       const component = components.find(c => c.name === componentName && c.path === componentPath);
 
       routedComponents.push(component);
     }
 
     if (childrenElement && ts.isPropertyAssignment(childrenElement)) {
-      routedComponents.push(...getRoutedComponents(childrenElement.initializer, languageService, components));
+      routedComponents.push(...getRoutedComponents(childrenElement.initializer, program, languageService, components));
     }
   } else if (ts.isArrayLiteralExpression(node)) {
     for (const element of node.elements) {
-      routedComponents.push(...getRoutedComponents(element, languageService, components));
+      routedComponents.push(...getRoutedComponents(element, program, languageService, components));
     }
   } else {
-    const definition = getDefinition(node, languageService);
+    const definition = getDefinition(node, program, languageService);
 
     if (definition) {
       const routesIdentifer: ts.Identifier = (ts as any).getTouchingToken(sourceFile, definition.textSpan.start);
       const routesDeclaration = routesIdentifer.parent as ts.VariableDeclaration;
 
-      routedComponents.push(...getRoutedComponents(routesDeclaration.initializer, languageService, components));
+      routedComponents.push(...getRoutedComponents(routesDeclaration.initializer, program, languageService, components));
     }
   }
 

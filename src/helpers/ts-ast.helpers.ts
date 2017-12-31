@@ -30,17 +30,26 @@ export function getObjectLiteralElement(node: ts.ObjectLiteralExpression, proper
   return node.properties.find(property => property.name.getText() === propertyName);
 }
 
-export function getDefinition(node: ts.Node, languageService: ts.LanguageService) {
+export function getDefinition(node: ts.Node, program: ts.Program, languageService: ts.LanguageService) {
   const sourceFile = node.getSourceFile();
+  const sourceFiles = program.getSourceFiles();
+
   const referencedSymbols = languageService.findReferences(sourceFile.fileName, node.getStart());
 
   let definition: ts.ReferenceEntry;
 
   if (referencedSymbols) {
+    const isInImportDeclaration = (reference: ts.ReferenceEntry) => {
+      const referenceSourceFile = sourceFiles.find(sf => sf.fileName === reference.fileName);
+
+      return getParentOfType((ts as any).getTouchingToken(referenceSourceFile, reference.textSpan.start), ts.isImportDeclaration) !== undefined;
+    };
+
     definition = referencedSymbols
       .map(referencedSymbol => referencedSymbol.references)
       .reduce((flat, current) => flat.concat(current), [])
-      .filter(reference => reference.isDefinition)[0];
+      .filter(reference => reference.isDefinition)
+      .filter(reference => !isInImportDeclaration(reference))[0];
   }
 
   return definition;
