@@ -49,10 +49,6 @@
     ],
     "interface-over-type-literal": true,
     "label-position": true,
-    "linebreak-style": [
-      true,
-      "CRLF"
-    ],
     "max-line-length": [
       true,
       180
