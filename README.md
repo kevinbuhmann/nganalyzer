@@ -2,6 +2,11 @@
 
 `nglint` is a tool for linting Angular apps.
 
+## Installation
+
+- `npm install --save-dev nglint-cli`
+- `yarn add --dev nglint-cli`
+
 ## Usage
 
 - `nglint --help`: display help info

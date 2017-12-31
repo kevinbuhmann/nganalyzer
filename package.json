@@ -1,5 +1,5 @@
 {
-  "name": "nglint",
+  "name": "nglint-cli",
   "version": "0.1.0",
   "bin": {
     "nglint": "dist/index.js"
