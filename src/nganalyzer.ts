@@ -21,10 +21,8 @@ export function nganalyzer(config: Config, project: string) {
     .filter(ruleName => config.rules[ruleName] === true)
     .map(ruleName => new (require(`./rules/${ruleName}.rule`).Rule)() as AbstractRule);
 
-  for (const sourceFile of program.getSourceFiles()) {
-    for (const rule of rules) {
-      rule.apply(sourceFile, ngProgram, failureReporter);
-    }
+  for (const rule of rules) {
+    rule.apply(ngProgram, failureReporter);
   }
 
   return failureReporter;

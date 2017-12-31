@@ -1,10 +1,6 @@
-import * as path from 'path';
-import * as ts from 'typescript';
-
 import { AbstractRule } from './../abstract-rule';
 import { FailureReporter } from './../failure-reporter';
 import { containsMatchingElement } from './../helpers/ng-html-ast.helpers';
-import { getComponentSelector, isComponentClass } from './../helpers/ts-ast.helpers';
 import { NgProgram } from './../ng-program';
 
 export class Rule extends AbstractRule {
@@ -12,23 +8,17 @@ export class Rule extends AbstractRule {
     return `The '${component}' component is not used. Remove it.`;
   }
 
-  apply(sourceFile: ts.SourceFile, ngProgram: NgProgram, failureReporter: FailureReporter) {
-    if (!sourceFile.fileName.endsWith('.spec.ts')) {
-      ts.forEachChild(sourceFile, function visit(node) {
-        if (ts.isClassDeclaration(node) && isComponentClass(node)) {
-          const componentName = node.name.getText();
-          const selector = getComponentSelector(node);
+  apply(ngProgram: NgProgram, failureReporter: FailureReporter) {
+    const nonSpecComponents = ngProgram.components
+      .filter(component => !component.path.endsWith('.spec.ts'));
 
-          const componentUsedInRoutes = ngProgram.routedComponents.some(component => component.path === path.normalize(sourceFile.fileName) && component.name === componentName);
-          const componentUsedInTemplate = selector && ngProgram.components.some(component => containsMatchingElement(component.templateAst, element => element.name === selector));
+    for (const component of nonSpecComponents) {
+      const componentUsedInRoutes = ngProgram.routedComponents.includes(component);
+      const componentUsedInTemplate = ngProgram.components.some(({ templateAst }) => containsMatchingElement(templateAst, element => element.name === component.selector));
 
-          if (!componentUsedInRoutes && !componentUsedInTemplate && selector !== 'app-root') {
-            failureReporter.addFailureAtNode(node.name, Rule.FAILURE_STRING_FACTORY(selector || componentName));
-          }
-        }
-
-        ts.forEachChild(node, visit);
-      });
+      if (!componentUsedInRoutes && !componentUsedInTemplate && component.selector !== 'app-root') {
+        failureReporter.addFailureAtNode(component.node.name, Rule.FAILURE_STRING_FACTORY(component.selector || component.name));
+      }
     }
   }
 }

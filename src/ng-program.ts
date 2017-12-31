@@ -12,6 +12,7 @@ const htmlParser = new ngc.HtmlParser();
 export interface Component {
   path: string;
   name: string;
+  node: ts.ClassDeclaration;
   selector: string;
   template: string;
   templateAst: ngc.ParseTreeResult;
@@ -47,7 +48,7 @@ export function getAllComponents(program: ts.Program) {
         const template = componentMetadata.template.template.source;
         const templateAst = htmlParser.parse(template, undefined);
 
-        components.push({ name: componentName, path: componentPath, selector, template, templateAst });
+        components.push({ name: componentName, path: componentPath, node, selector, template, templateAst });
       }
 
       ts.forEachChild(node, visit);
