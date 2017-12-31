@@ -95,13 +95,7 @@ function getRoutedComponents(node: ts.Node, languageService: ts.LanguageService,
       const componentPath = `${path.resolve(path.dirname(sourceFile.fileName), importSource)}.ts`;
       const component = components.find(c => c.name === componentName && c.path === componentPath);
 
-      if (component) {
-        routedComponents.push(component);
-      } else {
-        console.log(components.map(c => ({ name: c.name, path: c.path })));
-        console.log(componentName, componentPath);
-        process.exit(1);
-      }
+      routedComponents.push(component);
     }
 
     if (childrenElement && ts.isPropertyAssignment(childrenElement)) {
