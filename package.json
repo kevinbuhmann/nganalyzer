@@ -14,7 +14,7 @@
     "lint": "tslint --project ./tsconfig.json",
     "prebuild": "yarn run clean && yarn run lint",
     "build": "tsc --project ./tsconfig.json",
-    "prepare": "yarn run build"
+    "prepublishOnly": "yarn run build"
   },
   "peerDependencies": {
     "codelyzer": ">=3.2.1",
