@@ -31,7 +31,7 @@ Add a `nglint.json` file at the root of your project to configure which rules to
 - `no-usused-component`: reports when a component is not used
 - `no-unused-component-bindings`: reports when a component input or output is not used
 
-## Why not use tsling?
+## Why not use tslint?
 
 These rules could be implemented as `tslint` rules. In fact, I originally did implement them as
 `tslint` rules. However, since these rules require the entire application structure to be read,
