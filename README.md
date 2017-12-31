@@ -1,6 +1,6 @@
 # nganalyzer
 
-`nganalyzer` is a tool for linting Angular apps.
+`nganalyzer` is a tool for analyzing Angular apps.
 
 ## Installation
 
