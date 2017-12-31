@@ -10,10 +10,7 @@
   "author": "Kevin Phelps <KevinPhelps11@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf ./dist",
-    "lint": "tslint --project ./tsconfig.json",
-    "prebuild": "yarn run clean && yarn run lint",
-    "build": "tsc --project ./tsconfig.json",
+    "build": "ts-node ./build/build.ts",
     "prepublishOnly": "yarn run build"
   },
   "peerDependencies": {
@@ -31,11 +28,14 @@
     "@angular/platform-browser": "5.1.2",
     "@angular/platform-browser-dynamic": "5.1.2",
     "@types/node": "8.5.2",
+    "@types/rimraf": "2.0.2",
     "@types/source-map": "0.5.2",
     "@types/yargs": "10.0.0",
+    "chalk": "2.3.0",
     "codelyzer": "4.0.2",
     "rimraf": "2.6.2",
     "rxjs": "5.5.6",
+    "ts-node": "4.1.0",
     "tslint": "5.8.0",
     "tslint-consistent-codestyle": "1.11.0",
     "typescript": "2.6.2",

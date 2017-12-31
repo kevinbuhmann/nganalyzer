@@ -222,6 +222,12 @@
     "no-accessor-recursion": true,
     "no-collapsible-if": true,
     "no-unnecessary-type-annotation": true,
+    "no-unused": [
+      true,
+      "unused-catch-binding",
+      "unused-class-expression-name",
+      "unused-function-expression-name"
+    ],
     "prefer-const-enum": true
   }
 }
