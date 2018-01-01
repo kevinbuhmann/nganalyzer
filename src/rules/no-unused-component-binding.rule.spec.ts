@@ -175,4 +175,30 @@ describe('no-unused-component-binding', () => {
 
     expectRuleSuccess(Rule, sources);
   });
+
+  it('should not report change output used in two-way binding', () => {
+    const appComponentCode = `
+      @Component({
+        selector: 'app-root',
+        template: '<div><app-home [(info)]="info"></app-home></div>'
+      })
+      export class AppComponent { }`;
+
+    const homeComponentCode = `
+      @Component({
+        selector: 'app-home',
+        template: '<div>app-home</div>'
+      })
+      export class HomeComponent {
+        @Input() info: string;
+        @Output() infoChange = new EventEmitter<string>();
+      }`;
+
+    const sources = {
+      'app.component.ts': appComponentCode,
+      'home.component.ts': homeComponentCode
+    };
+
+    expectRuleSuccess(Rule, sources);
+  });
 });

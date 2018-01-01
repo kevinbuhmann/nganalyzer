@@ -20,15 +20,15 @@ export class Rule extends AbstractRule {
           const outputDecorator = node.decorators && node.decorators.find(decorator => getDecoratorName(decorator) === 'Output');
 
           if (inputDecorator || outputDecorator) {
+            const bindingType = inputDecorator ? 'input' : 'output';
             const decorator = inputDecorator || outputDecorator;
             const decoratorArgument = ts.isCallExpression(decorator.expression) ? decorator.expression.arguments[0] : undefined;
             const binding = decoratorArgument && ts.isStringLiteral(decoratorArgument) ? decoratorArgument.text : node.name.getText();
 
-            const attrNames = inputDecorator ? [binding, `[${binding}]`, `[(${binding})]`] : [`(${binding})`, `[(${binding.replace(/Change$/, '')})]`];
+            const attrNames = getPossibleAttrNames(binding, bindingType);
             const elementUsesBinding = (element: ngc.Element) => element.name === component.selector && element.attrs.some(attr => attrNames.includes(attr.name));
 
             if (!ngProgram.components.some(({ templateAst }) => containsMatchingElement(templateAst, elementUsesBinding))) {
-              const bindingType = inputDecorator ? 'input' : 'output';
               failureReporter.addFailureAtNode(node.name, Rule.FAILURE_STRING_FACTORY(component.selector, binding, bindingType));
             }
           }
@@ -38,4 +38,14 @@ export class Rule extends AbstractRule {
       });
     }
   }
+}
+
+function getPossibleAttrNames(binding: string, bindingType: 'input' | 'output') {
+  const attrNames = bindingType === 'input' ? [binding, `[${binding}]`, `[(${binding})]`] : [`(${binding})`];
+
+  if (bindingType === 'output' && binding.endsWith('Change')) {
+    attrNames.push(`[(${binding.replace(/Change$/, '')})]`);
+  }
+
+  return attrNames;
 }
