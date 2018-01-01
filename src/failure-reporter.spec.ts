@@ -7,9 +7,7 @@ describe('FailureReporter', () => {
   it('should report success correctly', () => {
     const failureReporter = new FailureReporter();
 
-    const failureReport = failureReporter.report();
-
-    expect(failureReport.length).toBe(0);
+    expect(failureReporter.report()).toEqual([]);
   });
 
   it('should report errors correctly', () => {
@@ -31,10 +29,11 @@ describe('FailureReporter', () => {
       ts.forEachChild(node, visit);
     });
 
-    const failureReport = failureReporter.report();
+    const failures = [
+      'ERROR: test-source.ts[3,9]: Property \'name\' not allowed.',
+      'ERROR: test-source.ts[4,9]: Property \'birthdate\' not allowed.'
+    ];
 
-    expect(failureReport.length).toBe(2);
-    expect(failureReport[0]).toBe('ERROR: test-source.ts[3,9]: Property \'name\' not allowed.');
-    expect(failureReport[1]).toBe('ERROR: test-source.ts[4,9]: Property \'birthdate\' not allowed.');
+    expect(failureReporter.report()).toEqual(failures);
   });
 });
