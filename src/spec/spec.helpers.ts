@@ -20,16 +20,16 @@ export function getTypescriptProgram(sources: Sources) {
   return ts.createProgram(Object.keys(sources), {}, new TestCompilerHost(sources));
 }
 
-export function expectRuleSuccess(Rule: new () => AbstractRule, sources: Sources) {
-  expect(runRule(Rule, sources)).toEqual([]);
+export function expectRuleSuccess(ruleName: string, sources: Sources) {
+  expect(applyRule(ruleName, sources)).toEqual([]);
 }
 
-export function expectRuleFailures(Rule: new () => AbstractRule, sources: Sources) {
-  return expect(runRule(Rule, sources));
+export function expectRuleFailures(ruleName: string, sources: Sources) {
+  return expect(applyRule(ruleName, sources));
 }
 
-function runRule(Rule: new () => AbstractRule, sources: Sources) {
-  const rule = new Rule();
+function applyRule(ruleName: string, sources: Sources) {
+  const rule = new (require(`./../rules/${ruleName}.rule`)).Rule() as AbstractRule;
 
   const program = getTypescriptProgram(sources);
   const ngProgram = getNgProgram(program);

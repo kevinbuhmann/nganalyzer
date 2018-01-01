@@ -1,5 +1,4 @@
 import { expectRuleFailures, expectRuleSuccess } from './../spec/spec.helpers';
-import { Rule } from './no-unused-component.rule';
 
 describe('no-unused-component', () => {
   it('should pass when no failures', () => {
@@ -40,7 +39,7 @@ describe('no-unused-component', () => {
       'app-routing.module.ts': appRoutingModuleCode
     };
 
-    expectRuleSuccess(Rule, sources);
+    expectRuleSuccess('no-unused-component', sources);
   });
 
   it('should report unused component', () => {
@@ -93,6 +92,6 @@ describe('no-unused-component', () => {
       'ERROR: about.component.ts[6,20]: The \'app-about\' component is not used. Remove it.'
     ];
 
-    expectRuleFailures(Rule, sources).toEqual(failures);
+    expectRuleFailures('no-unused-component', sources).toEqual(failures);
   });
 });

@@ -1,5 +1,4 @@
 import { expectRuleFailures, expectRuleSuccess } from './../spec/spec.helpers';
-import { Rule } from './no-unused-component-binding.rule';
 
 describe('no-unused-component-binding', () => {
   it('should pass when no failures', () => {
@@ -25,7 +24,7 @@ describe('no-unused-component-binding', () => {
       'home.component.ts': homeComponentCode
     };
 
-    expectRuleSuccess(Rule, sources);
+    expectRuleSuccess('no-unused-component-binding', sources);
   });
 
   it('should report unused input', () => {
@@ -55,7 +54,7 @@ describe('no-unused-component-binding', () => {
       'ERROR: home.component.ts[7,18]: The \'info\' input on the \'app-home\' component is not used. Remove it.'
     ];
 
-    expectRuleFailures(Rule, sources).toEqual(failures);
+    expectRuleFailures('no-unused-component-binding', sources).toEqual(failures);
   });
 
   it('should report unused output', () => {
@@ -85,7 +84,7 @@ describe('no-unused-component-binding', () => {
       'ERROR: home.component.ts[8,19]: The \'update\' output on the \'app-home\' component is not used. Remove it.'
     ];
 
-    expectRuleFailures(Rule, sources).toEqual(failures);
+    expectRuleFailures('no-unused-component-binding', sources).toEqual(failures);
   });
 
   it('should report unused input and output', () => {
@@ -116,7 +115,7 @@ describe('no-unused-component-binding', () => {
       'ERROR: home.component.ts[8,19]: The \'update\' output on the \'app-home\' component is not used. Remove it.'
     ];
 
-    expectRuleFailures(Rule, sources).toEqual(failures);
+    expectRuleFailures('no-unused-component-binding', sources).toEqual(failures);
   });
 
   it('should report unused aliased input and output', () => {
@@ -147,7 +146,7 @@ describe('no-unused-component-binding', () => {
       'ERROR: home.component.ts[8,27]: The \'update\' output on the \'app-home\' component is not used. Remove it.'
     ];
 
-    expectRuleFailures(Rule, sources).toEqual(failures);
+    expectRuleFailures('no-unused-component-binding', sources).toEqual(failures);
   });
 
   it('should not report used aliased input and output', () => {
@@ -173,7 +172,7 @@ describe('no-unused-component-binding', () => {
       'home.component.ts': homeComponentCode
     };
 
-    expectRuleSuccess(Rule, sources);
+    expectRuleSuccess('no-unused-component-binding', sources);
   });
 
   it('should not report change output used in two-way binding', () => {
@@ -199,6 +198,6 @@ describe('no-unused-component-binding', () => {
       'home.component.ts': homeComponentCode
     };
 
-    expectRuleSuccess(Rule, sources);
+    expectRuleSuccess('no-unused-component-binding', sources);
   });
 });
