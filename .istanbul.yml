@@ -1,0 +1,9 @@
+instrumentation:
+  root: ./dist-spec
+  include-all-sources: true
+  verbose: true
+  excludes: ['**/*.spec.js', '**/spec/*.js']
+reporting:
+  dir: 'coverage'
+  reports:
+    - lcovonly

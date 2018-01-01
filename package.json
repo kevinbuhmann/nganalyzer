@@ -11,6 +11,7 @@
   "license": "MIT",
   "scripts": {
     "build": "ts-node ./build/build.ts",
+    "print-coverage": "istanbul report -t text",
     "report-coverage": "cat ./coverage/lcov.info | codecov",
     "prepublishOnly": "yarn run build"
   },
@@ -20,7 +21,6 @@
     "typescript": ">=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev"
   },
   "dependencies": {
-    "istanbul": "0.4.5",
     "yargs": "10.0.3"
   },
   "devDependencies": {
@@ -37,9 +37,9 @@
     "chalk": "2.3.0",
     "codecov": "3.0.0",
     "codelyzer": "4.0.2",
+    "istanbul": "0.4.5",
     "jasmine": "2.8.0",
-    "jasmine-ts": "0.2.1",
-    "nyc": "11.4.1",
+    "remap-istanbul": "0.9.5",
     "rimraf": "2.6.2",
     "rxjs": "5.5.6",
     "ts-node": "4.1.0",
