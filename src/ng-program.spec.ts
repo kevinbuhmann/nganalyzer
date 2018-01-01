@@ -59,23 +59,26 @@ describe('getNgProgram', () => {
 
     expect(ngProgram.components.length).toBe(3);
 
-    expect(ngProgram.components[0].path).toBe('app.component.ts');
-    expect(ngProgram.components[0].name).toBe('AppComponent');
-    expect(ngProgram.components[0].selector).toBe('app-root');
-    expect(ngProgram.components[0].template).toBe('<div>app-root</div>');
+    const [appComponent, homeComponent, aboutComponent] = ngProgram.components;
 
-    expect(ngProgram.components[1].path).toBe('home.component.ts');
-    expect(ngProgram.components[1].name).toBe('HomeComponent');
-    expect(ngProgram.components[1].selector).toBe('app-home');
-    expect(ngProgram.components[1].template).toBe('<div>app-home</div>');
+    expect(appComponent).toBeTruthy();
+    expect(appComponent.path).toBe('app.component.ts');
+    expect(appComponent.name).toBe('AppComponent');
+    expect(appComponent.selector).toBe('app-root');
+    expect(appComponent.template).toBe('<div>app-root</div>');
 
-    expect(ngProgram.components[2].path).toBe('about.component.ts');
-    expect(ngProgram.components[2].name).toBe('AboutComponent');
-    expect(ngProgram.components[2].selector).toBe('app-about');
-    expect(ngProgram.components[2].template).toBe('<div>app-about</div>');
+    expect(homeComponent).toBeTruthy();
+    expect(homeComponent.path).toBe('home.component.ts');
+    expect(homeComponent.name).toBe('HomeComponent');
+    expect(homeComponent.selector).toBe('app-home');
+    expect(homeComponent.template).toBe('<div>app-home</div>');
 
-    expect(ngProgram.routedComponents.length).toBe(2);
-    expect(ngProgram.routedComponents[0]).toBe(ngProgram.components[1]);
-    expect(ngProgram.routedComponents[1]).toBe(ngProgram.components[2]);
+    expect(aboutComponent).toBeTruthy();
+    expect(aboutComponent.path).toBe('about.component.ts');
+    expect(aboutComponent.name).toBe('AboutComponent');
+    expect(aboutComponent.selector).toBe('app-about');
+    expect(aboutComponent.template).toBe('<div>app-about</div>');
+
+    expect(ngProgram.routedComponents).toEqual([homeComponent, aboutComponent]);
   });
 });
