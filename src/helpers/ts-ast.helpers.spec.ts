@@ -105,7 +105,10 @@ describe('getObjectLiteralElement', () => {
       ({
         name: 'John Smith',
         age: 25,
-        address: '123 Main St.'
+        'address': '123 Main St.',
+        5: '5',
+        [infoProp]: 'info',
+        [getInfoProp()]: 'info'
       })`;
 
     const sourceFile = parseTypescript(source);
@@ -116,8 +119,14 @@ describe('getObjectLiteralElement', () => {
     expect(getObjectLiteralElement(objectLiteralNode, 'name')).toBe(objectLiteralNode.properties[0]);
     expect(getObjectLiteralElement(objectLiteralNode, 'age')).toBe(objectLiteralNode.properties[1]);
     expect(getObjectLiteralElement(objectLiteralNode, 'address')).toBe(objectLiteralNode.properties[2]);
+    expect(getObjectLiteralElement(objectLiteralNode, '5')).toBe(objectLiteralNode.properties[3]);
 
     expect(getObjectLiteralElement(objectLiteralNode, 'city')).toBe(undefined);
     expect(getObjectLiteralElement(objectLiteralNode, 'state')).toBe(undefined);
+    expect(getObjectLiteralElement(objectLiteralNode, 'infoProp')).toBe(undefined);
+    expect(getObjectLiteralElement(objectLiteralNode, '[infoProp]')).toBe(undefined);
+    expect(getObjectLiteralElement(objectLiteralNode, 'getInfoProp')).toBe(undefined);
+    expect(getObjectLiteralElement(objectLiteralNode, 'getInfoProp()')).toBe(undefined);
+    expect(getObjectLiteralElement(objectLiteralNode, '[getInfoProp()]')).toBe(undefined);
   });
 });

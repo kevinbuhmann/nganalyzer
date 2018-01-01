@@ -27,7 +27,9 @@ export function getParentOfType<T extends ts.Node>(node: ts.Node, predicate: (n:
 }
 
 export function getObjectLiteralElement(node: ts.ObjectLiteralExpression, propertyName: string) {
-  return node.properties.find(property => property.name.getText() === propertyName);
+  return node.properties
+    .filter(property => property.name !== undefined)
+    .find(property => (ts.isStringLiteral(property.name) || ts.isIdentifier(property.name) || ts.isNumericLiteral(property.name)) && property.name.text === propertyName);
 }
 
 export function getDefinition(node: ts.Node, program: ts.Program, languageService: ts.LanguageService) {
