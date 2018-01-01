@@ -88,7 +88,7 @@ describe('no-unused-component-binding', () => {
     expectRuleFailures(Rule, sources).toEqual(failures);
   });
 
-  it('should report unused input and ouput', () => {
+  it('should report unused input and output', () => {
     const appComponentCode = `
       @Component({
         selector: 'app-root',
@@ -119,7 +119,7 @@ describe('no-unused-component-binding', () => {
     expectRuleFailures(Rule, sources).toEqual(failures);
   });
 
-  it('should report unused aliased input and ouput', () => {
+  it('should report unused aliased input and output', () => {
     const appComponentCode = `
       @Component({
         selector: 'app-root',
@@ -150,7 +150,7 @@ describe('no-unused-component-binding', () => {
     expectRuleFailures(Rule, sources).toEqual(failures);
   });
 
-  it('should not report used aliased input and ouput', () => {
+  it('should not report used aliased input and output', () => {
     const appComponentCode = `
       @Component({
         selector: 'app-root',
