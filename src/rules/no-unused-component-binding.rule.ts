@@ -14,7 +14,7 @@ export class Rule extends AbstractRule {
 
   apply(ngProgram: NgProgram, failureReporter: FailureReporter) {
     for (const component of ngProgram.components) {
-      ts.forEachChild(component.node, function visit(node) {
+      ts.forEachChild(component.node, node => {
         if (ts.isPropertyDeclaration(node)) {
           const inputDecorator = node.decorators && node.decorators.find(decorator => getDecoratorName(decorator) === 'Input');
           const outputDecorator = node.decorators && node.decorators.find(decorator => getDecoratorName(decorator) === 'Output');
@@ -33,8 +33,6 @@ export class Rule extends AbstractRule {
             }
           }
         }
-
-        ts.forEachChild(node, visit);
       });
     }
   }
