@@ -5,7 +5,7 @@ import * as ts from 'typescript';
 const ngMetadataReader = ngWalkerFactoryUtils.defaultMetadataReader();
 
 export function isComponentClass(node: ts.ClassDeclaration) {
-  return node.decorators && node.decorators.some(decorator => getDecoratorName(decorator) === 'Component');
+  return node.decorators ? node.decorators.some(decorator => getDecoratorName(decorator) === 'Component') : false;
 }
 
 export function getComponentSelector(node: ts.ClassDeclaration) {

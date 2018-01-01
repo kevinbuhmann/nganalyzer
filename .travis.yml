@@ -9,3 +9,5 @@ branches:
   only: master
 script:
 - yarn run build
+after_success:
+- yarn run report-coverage

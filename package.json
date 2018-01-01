@@ -11,6 +11,7 @@
   "license": "MIT",
   "scripts": {
     "build": "ts-node ./build/build.ts",
+    "report-coverage": "cat ./coverage/lcov.info | codecov",
     "prepublishOnly": "yarn run build"
   },
   "peerDependencies": {
@@ -19,6 +20,7 @@
     "typescript": ">=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >=2.4.0-dev || >=2.5.0-dev || >=2.6.0-dev || >=2.7.0-dev || >=2.8.0-dev"
   },
   "dependencies": {
+    "istanbul": "0.4.5",
     "yargs": "10.0.3"
   },
   "devDependencies": {
@@ -27,12 +29,17 @@
     "@angular/core": "5.1.2",
     "@angular/platform-browser": "5.1.2",
     "@angular/platform-browser-dynamic": "5.1.2",
+    "@types/jasmine": "2.8.3",
     "@types/node": "8.5.2",
     "@types/rimraf": "2.0.2",
     "@types/source-map": "0.5.2",
     "@types/yargs": "10.0.0",
     "chalk": "2.3.0",
+    "codecov": "3.0.0",
     "codelyzer": "4.0.2",
+    "jasmine": "2.8.0",
+    "jasmine-ts": "0.2.1",
+    "nyc": "11.4.1",
     "rimraf": "2.6.2",
     "rxjs": "5.5.6",
     "ts-node": "4.1.0",

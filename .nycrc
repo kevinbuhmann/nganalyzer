@@ -1,0 +1,18 @@
+{
+  "all": true,
+  "extension": [
+    ".ts"
+  ],
+  "exclude": [
+    "dist",
+    "build",
+    "coverage",
+    "src/spec",
+    "**/*.spec.ts"
+  ],
+  "reporter": [
+    "lcov",
+    "html",
+    "text"
+  ]
+}

@@ -11,8 +11,6 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "newLine": "LF",
     "lib": [
       "es2015",
@@ -30,5 +28,8 @@
     "./src/index.ts",
     "./src/nganalyzer-cli.ts",
     "./src/rules/*.ts"
+  ],
+  "exclude": [
+    "*.spec.ts"
   ]
 }
