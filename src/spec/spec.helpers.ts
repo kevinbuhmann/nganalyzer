@@ -1,9 +1,9 @@
 import * as ngc from '@angular/compiler';
 import * as ts from 'typescript';
 
-import { AbstractRule } from './../abstract-rule';
 import { FailureReporter } from './../failure-reporter';
 import { getNgProgram } from './../ng-program';
+import { loadRule } from './../nganalyzer';
 import { Sources, TestCompilerHost } from './test-compiler-host';
 
 const htmlParser = new ngc.HtmlParser();
@@ -29,7 +29,7 @@ export function expectRuleFailures(ruleName: string, sources: Sources) {
 }
 
 function applyRule(ruleName: string, sources: Sources) {
-  const rule = new (require(`./../rules/${ruleName}.rule`)).Rule() as AbstractRule;
+  const rule = loadRule(ruleName);
 
   const program = getTypescriptProgram(sources);
   const ngProgram = getNgProgram(program);
