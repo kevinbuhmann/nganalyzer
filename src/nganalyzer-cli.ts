@@ -13,8 +13,9 @@ const args = yargs.argv;
 
 const config = getConfig();
 
-const failuresFound = nganalyzer(config, args.project).report();
+const failureReport = nganalyzer(config, args.project).report();
 
-if (failuresFound) {
+if (failureReport.length > 0) {
+  console.log(failureReport.join('\n'));
   process.exit(1);
 }

@@ -20,15 +20,17 @@ export class FailureReporter {
   }
 
   report() {
+    const failureReport: string[] = [];
+
     if (this.failures.length > 0) {
       for (const failure of this.failures) {
         const sourceFile = failure.sourceFile;
         const { line, character } = sourceFile.getLineAndCharacterOfPosition(failure.start);
 
-        console.log(`ERROR: ${sourceFile.fileName}[${line + 1},${character + 1}]: ${failure.message}`);
+        failureReport.push(`ERROR: ${sourceFile.fileName}[${line + 1},${character + 1}]: ${failure.message}`);
       }
     }
 
-    return this.failures.length > 0;
+    return failureReport;
   }
 }
