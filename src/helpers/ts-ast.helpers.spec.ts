@@ -1,7 +1,8 @@
 import * as ts from 'typescript';
 
-import { parseTypescript } from './../spec/spec.helpers';
-import { getComponentSelector, getObjectLiteralElement, getParentOfType, isComponentClass } from './ts-ast.helpers';
+import { ProgramLanguageServiceHost } from './../program-language-service-host';
+import { getTypescriptProgram, parseTypescript } from './../spec/spec.helpers';
+import { dereferenceLiterals, getComponentSelector, getObjectLiteralElement, getParentOfType, isComponentClass } from './ts-ast.helpers';
 
 describe('isComponentClass', () => {
   it('should return true for component class', () => {
@@ -128,5 +129,55 @@ describe('getObjectLiteralElement', () => {
     expect(getObjectLiteralElement(objectLiteralNode, 'getInfoProp')).toBe(undefined);
     expect(getObjectLiteralElement(objectLiteralNode, 'getInfoProp()')).toBe(undefined);
     expect(getObjectLiteralElement(objectLiteralNode, '[getInfoProp()]')).toBe(undefined);
+  });
+});
+
+describe('dereferenceLiterals', () => {
+  it('should dereference all references to literal values', () => {
+    const fileASource = `
+      export const hello1 = \'hello world\';
+      export const hello2 = { hello: hello1 };
+      export const hello3 = [ hello1 ];`;
+
+    const fileBSource = `
+      import { hello1, hello2, hello3 } from './file-a';
+
+      const hellos = [ hello1, hello2, hello3 ]`;
+
+    const sources = {
+      'file-a.ts': fileASource,
+      'file-b.ts': fileBSource
+    };
+
+    const program = getTypescriptProgram(sources);
+    const languageServiceHost = new ProgramLanguageServiceHost(program);
+    const languageService = ts.createLanguageService(languageServiceHost, ts.createDocumentRegistry());
+
+    const fileBSourceFile = program.getSourceFile('file-b.ts');
+    const hellosIdentifier = fileBSourceFile.getChildAt(0).getChildAt(1).getChildAt(0).getChildAt(1).getChildAt(0).getChildAt(0) as ts.Identifier;
+
+    const dereferencedNode = dereferenceLiterals(hellosIdentifier, program, languageService) as ts.ArrayLiteralExpression;
+
+    expect(ts.isArrayLiteralExpression(dereferencedNode)).toBe(true);
+    expect(dereferencedNode.elements.length).toBe(3);
+    const [ element1, element2, element3 ] = Array.from(dereferencedNode.elements) as [ts.StringLiteral, ts.ObjectLiteralExpression, ts.ArrayLiteralExpression];
+
+    expect(ts.isStringLiteral(element1)).toBe(true);
+    expect(element1.text).toBe('hello world');
+
+    expect(ts.isObjectLiteralExpression(element2)).toBe(true);
+    expect(element2.properties.length).toBe(1);
+    const [ element2_property1 ] = Array.from(element2.properties) as [ts.PropertyAssignment];
+    expect(ts.isPropertyAssignment(element2_property1)).toBe(true);
+    expect(ts.isIdentifier(element2_property1.name)).toBe(true);
+    expect(ts.isStringLiteral(element2_property1.initializer)).toBe(true);
+    expect((element2_property1.name as ts.Identifier).text).toBe('hello');
+    expect((element2_property1.initializer as ts.StringLiteral).text).toBe('hello world');
+
+    expect(ts.isArrayLiteralExpression(element3)).toBe(true);
+    expect(element3.elements.length).toBe(1);
+    const [ element3_element1 ] = Array.from(element3.elements) as [ts.StringLiteral];
+    expect(ts.isStringLiteral(element3_element1)).toBe(true);
+    expect(element3_element1.text).toBe('hello world');
   });
 });

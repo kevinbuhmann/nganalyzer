@@ -3,7 +3,7 @@ import { ComponentMetadata } from 'codelyzer/angular/metadata';
 import { ngWalkerFactoryUtils } from 'codelyzer/angular/ngWalkerFactoryUtils';
 import * as ts from 'typescript';
 
-import { getDefinition, getObjectLiteralElement, isComponentClass } from './helpers/ts-ast.helpers';
+import { dereferenceLiterals, getDefinition, getObjectLiteralElement, isComponentClass } from './helpers/ts-ast.helpers';
 import { ProgramLanguageServiceHost } from './program-language-service-host';
 
 const ngMetadataReader = ngWalkerFactoryUtils.defaultMetadataReader();
@@ -79,42 +79,26 @@ function getAllRoutedComponents(program: ts.Program, languageService: ts.Languag
 
 }
 
-function getRoutedComponents(node: ts.Node, program: ts.Program, languageService: ts.LanguageService, components: Component[]) {
+function getRoutedComponents(routes: ts.Node, program: ts.Program, languageService: ts.LanguageService, components: Component[]) {
   const routedComponents: Component[] = [];
 
-  const sourceFile = node.getSourceFile();
+  const deferencedRoutes = dereferenceLiterals(routes, program, languageService);
 
-  if (ts.isObjectLiteralExpression(node)) {
-    const componentElement = getObjectLiteralElement(node, 'component');
-    const childrenElement = getObjectLiteralElement(node, 'children');
+  ts.forEachChild(deferencedRoutes, function visit(node) {
+    if (ts.isObjectLiteralExpression(node)) {
+      const componentElement = getObjectLiteralElement(node, 'component');
 
-    if (componentElement && ts.isPropertyAssignment(componentElement)) {
-      const componentName = componentElement.initializer.getText();
-      const componentDefinition = getDefinition(componentElement.initializer, program, languageService);
-      const componentPath = componentDefinition.fileName;
+      if (componentElement && ts.isPropertyAssignment(componentElement)) {
+        const componentName = componentElement.initializer.getText();
+        const componentDefinition = getDefinition(componentElement.initializer, program, languageService);
+        const componentPath = componentDefinition.fileName;
 
-      const component = components.find(c => c.name === componentName && c.path === componentPath);
-
-      routedComponents.push(component);
+        routedComponents.push(components.find(component => component.name === componentName && component.path === componentPath));
+      }
     }
 
-    if (childrenElement && ts.isPropertyAssignment(childrenElement)) {
-      routedComponents.push(...getRoutedComponents(childrenElement.initializer, program, languageService, components));
-    }
-  } else if (ts.isArrayLiteralExpression(node)) {
-    for (const element of node.elements) {
-      routedComponents.push(...getRoutedComponents(element, program, languageService, components));
-    }
-  } else {
-    const definition = getDefinition(node, program, languageService);
-
-    if (definition) {
-      const routesIdentifer: ts.Identifier = (ts as any).getTouchingToken(sourceFile, definition.textSpan.start);
-      const routesDeclaration = routesIdentifer.parent as ts.VariableDeclaration;
-
-      routedComponents.push(...getRoutedComponents(routesDeclaration.initializer, program, languageService, components));
-    }
-  }
+    ts.forEachChild(node, visit);
+  });
 
   return routedComponents;
 }

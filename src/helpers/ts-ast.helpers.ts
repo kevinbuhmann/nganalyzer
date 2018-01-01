@@ -56,3 +56,25 @@ export function getDefinition(node: ts.Node, program: ts.Program, languageServic
 
   return definition;
 }
+
+export function dereferenceLiterals(sourceNode: ts.Node, program: ts.Program, languageService: ts.LanguageService) {
+  return ts.visitNode(sourceNode, function visit(node): ts.Node {
+    const definition = ts.isIdentifier(node) ? getDefinition(node, program, languageService) : undefined;
+    const definitionSourceFile = definition ? program.getSourceFile(definition.fileName) : undefined;
+    const identifier = definition ? (ts as any).getTouchingToken(definitionSourceFile, definition.textSpan.start) : undefined;
+
+    const resultNode = identifier && ts.isIdentifier(identifier) && ts.isVariableDeclaration(identifier.parent) && isLiteral(identifier.parent.initializer) ?
+      identifier.parent.initializer : node;
+
+    return ts.visitEachChild(resultNode, visit, undefined);
+  });
+}
+
+function isLiteral(node: ts.Node) {
+  return ts.isNumericLiteral(node)
+    || ts.isStringLiteral(node)
+    || ts.isRegularExpressionLiteral(node)
+    || ts.isNoSubstitutionTemplateLiteral(node)
+    || ts.isArrayLiteralExpression(node)
+    || ts.isObjectLiteralExpression(node);
+}
