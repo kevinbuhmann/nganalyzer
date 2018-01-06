@@ -11,11 +11,12 @@ export interface ExecuteResult {
   signal?: string;
 }
 
-export function execute(command: string) {
+export function execute(command: string, options?: SpawnOptions) {
   const spawnOptions: SpawnOptions = {
     stdio: 'inherit',
     shell: true,
-    env: makeChildProcessEnv()
+    ...options,
+    env: makeChildProcessEnv(options && options.env ? options.env : { })
   };
 
   return promisifyProcess(command, () => spawn(command, [], spawnOptions));
@@ -54,8 +55,8 @@ function promisifyProcess(command: string, childProcessFn: () => ChildProcess) {
   });
 }
 
-function makeChildProcessEnv() {
-  const env = { ...process.env };
+function makeChildProcessEnv(environment: { [key: string]: string }) {
+  const env = { ...process.env, ...environment };
 
   const pathKey = getPathKey();
   const paths = [
