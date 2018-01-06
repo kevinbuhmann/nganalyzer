@@ -36,6 +36,6 @@ bailIf(options.watch && options.test, '--watch and --test are mutually exclusive
     await execute('remap-istanbul -i ./coverage/coverage.json -o ./coverage/coverage.json -t json');
     await execute('istanbul report -t lcov');
     await execute('istanbul report -t text-summary');
-    await execute('istanbul check-coverage --statements 85 --branches 85 --functions 85 --branches 85 --lines 85');
+    await execute('istanbul check-coverage --statements 85 --branches 85 --functions 85 --lines 85');
   }
 })();
