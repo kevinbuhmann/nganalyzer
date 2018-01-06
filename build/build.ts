@@ -25,7 +25,7 @@ bailIf(options.watch && options.test, '--watch and --test are mutually exclusive
   }
 
   if (options.lint) {
-    await execute('tslint --project ./tsconfig.lint.json');
+    await execute('ts-node ./build/lint.ts');
   }
 
   await execute(`tsc --project ./tsconfig.json ${options.watch ? '--watch' : ''}`);

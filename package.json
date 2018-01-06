@@ -10,6 +10,7 @@
   "author": "Kevin Phelps <KevinPhelps11@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "lint": "ts-node ./build/lint.ts",
     "build": "ts-node ./build/build.ts",
     "print-coverage": "istanbul report -t text",
     "report-coverage": "cat ./coverage/lcov.info | codecov",
